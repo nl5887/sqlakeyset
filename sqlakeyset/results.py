@@ -135,6 +135,7 @@ class Paging:
         rows = rows[:per_page]
         self.rows = rows
         self.marker_0 = current_marker
+        self._get_marker = marker
 
         if rows:
             self.marker_1 = marker(0)
@@ -155,6 +156,14 @@ class Paging:
             four.reverse()
 
         self.before, self.first, self.last, self.beyond = four
+
+    def get_marker_at(self, i):
+        """Get the marker for item at the given row index."""
+        return self._get_marker(i), self.backwards
+
+    def get_bookmark_at(self, i):
+        """Get the bookmark for item at the given row index."""
+        return serialize_bookmark(self.get_marker_at(i))
 
     @property
     def has_next(self):
